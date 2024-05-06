@@ -1,5 +1,4 @@
 // Camera.js
-
 class Camera {
     constructor() {
         this.eye = new Vector3([0, 1, -10]);
