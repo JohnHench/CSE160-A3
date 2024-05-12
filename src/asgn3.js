@@ -21,6 +21,7 @@ var FSHADER_SOURCE = `
     uniform sampler2D u_Sampler1;
     uniform sampler2D u_Sampler2;
     uniform sampler2D u_Sampler3;
+    uniform sampler2D u_Sampler4;
     uniform int u_whichTexture;
     void main() {
         if (u_whichTexture == -2) {
@@ -46,7 +47,10 @@ var FSHADER_SOURCE = `
         }
         else if (u_whichTexture == 5) {
             gl_FragColor = vec4(0.2, 0.2, 0.2, 1);
-        }       
+        }
+        else if (u_whichTexture == 6) {
+            gl_FragColor = texture2D(u_Sampler4, v_UV);
+        }            
         else {
             gl_FragColor = vec4(1, 0.5, 0.5,1);
         }
@@ -71,6 +75,7 @@ let u_Sampler0;
 let u_Sampler1;
 let u_Sampler2;
 let u_Sampler3;
+let u_Sampler4;
 
 function setupWebGL() {
     // Retrieve <canvas> element
@@ -175,6 +180,12 @@ function connectVariablesToGLSL() {
         return false;
     }
 
+    u_Sampler4 = gl.getUniformLocation(gl.program, 'u_Sampler4');
+    if (!u_Sampler4) {
+        console.log('Failed to get u_Sampler4');
+        return false;
+    }
+
     var identityM = new Matrix4();
     gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
 }
@@ -201,7 +212,7 @@ function initTextures() {
     image1.crossOrigin = "anonymous";
     image1.src = './textures/cobblestone.png';
   
-    // GRASS TEXTURE
+    // DIAMOND TEXTUREE
     var image2 = new Image();
     if (!image2) {
         console.log('Failed to get image2');
@@ -220,6 +231,16 @@ function initTextures() {
     image3.onload = function () { sendImageToTEXTURE3(image3); };
     image3.crossOrigin = "anonymous";
     image3.src = './textures/dirt.png';
+
+    // DIAMOND BLOCK TEXTURE
+    var image4 = new Image();
+    if (!image4) {
+    console.log('Failed to get image4');
+    return false;
+    }
+    image4.onload = function () { sendImageToTEXTURE4(image4); };
+    image4.crossOrigin = "anonymous";
+    image4.src = './textures/Diamond_Block.png';
 
 }
 // BLUE_ICE TEXTURE
@@ -252,7 +273,7 @@ function sendImageToTEXTURE1(image1) {
     gl.uniform1i(u_Sampler1, 1);
 }
 
-// GRASS TEXTURE
+// DIAMOND TEXTURE
 function sendImageToTEXTURE2(image2) {
     var texture = gl.createTexture();
     if (!texture) {
@@ -280,6 +301,20 @@ function sendImageToTEXTURE3(image3) {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image3);
     gl.uniform1i(u_Sampler3, 3); 
+}
+
+function sendImageToTEXTURE4(image4) { 
+    var texture = gl.createTexture();
+    if (!texture) {
+        console.log('Failed to get texture4');
+        return false;
+    }
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+    gl.activeTexture(gl.TEXTURE4); 
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image4);
+    gl.uniform1i(u_Sampler4, 4); 
 }
 
 // Global variables
@@ -342,16 +377,6 @@ function main() {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     requestAnimationFrame(tick);
 }
-
-// This doesnt work at the moment 
-// function scroll(ev) {
-//     if (ev.deltaY > 0) {
-//         camera.moveForward(1);
-//     }
-//     else {
-//         camera.moveBackward(1);
-//     }
-// }
 
 // Tick function
 let time = 0;
@@ -428,7 +453,7 @@ function updateAnimationAngles() {
 var g_map = [
     [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 0, 0, 3, 4],
     [1, 3, 0, 0, 0, 0, 0, 5, 4, 5, 4, 0, 0, 0, 0, 4, 4, 4, 0, 0, 0, 0, 5, 4, 0, 0, 0, 2, 0, 0, 2, 4],
-    [0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 8, 0, 0, 8, 4],
     [0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 4, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 4],
     [0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 0, 4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 4, 0, 0, 0, 0, 0, 4],
     [1, 4, 4, 4, 4, 4, 0, 0, 4, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 4],
@@ -475,6 +500,7 @@ function drawMap() {
                     body.renderfaster();
                 }
             }
+            // 2 STACKED COBBLESTONE BLOCK
             else if (g_map[x][y] == 2) {
                 for (let i = 0; i < 2; i++) {
                     var body = new Cube();
@@ -484,6 +510,7 @@ function drawMap() {
                     body.renderfaster();
                 }
             }
+            // 3 STACKED COBBLESTONE BLOCK
             else if (g_map[x][y] == 3) {
                 for (let i = 0; i < 3; i++) {
                     var body = new Cube();
@@ -493,6 +520,7 @@ function drawMap() {
                     body.renderfaster();
                 }
             }
+            // 4 STACKED DIRT BLOCK
             else if (g_map[x][y] == 4) {
                 for (let i = 0; i < 4; i++) {
                     var body = new Cube();
@@ -502,49 +530,40 @@ function drawMap() {
                     body.renderfaster();
                 }
             }  
-
-            // TALL GRASS BLOCK
-            // else if (g_map[x][y] == 3) {
-            //     var body = new Cube();
-            //     body.textureNum = 2;
-            //     body.matrix.scale(1, 2, 1);
-            //     body.matrix.translate(x - 3.5, -.16, y - 4);
-            //     body.render();
-            // }
-
-            // DIAMOND BLOCK
+            // DIAMOND ORE BLOCK
             else if (g_map[x][y] == 5) {
                 var body = new Cube();
                 body.textureNum = 2;
                 body.matrix.translate(x - 4, -0.270, y - 4);
                 body.render();
             }
-            // 2 DIAMOND BLOCK STACKED
+            // 2 DIAMOND ORE BLOCK STACKED
             else if (g_map[x][y] == 6) {
                 for (let i = 0; i < 2; i++) {
                     var body = new Cube();
                     body.textureNum = 2;
                     // Increase the vertical translation for each cube
                     body.matrix.translate(x - 4, -0.27 + i * 1, y - 4);
-                    body.renderfaster();
+                    body.render();
                 }
             }
+            // 3 DIAMOND ORE BLOCK STACKED
             else if (g_map[x][y] == 7) {
                 for (let i = 0; i < 3; i++) {
                     var body = new Cube();
                     body.textureNum = 2;
                     // Increase the vertical translation for each cube
                     body.matrix.translate(x - 4, -0.27 + i * 1, y - 4);
-                    body.renderfaster();
+                    body.render();
                 }
             }
-            // // GREEN COLOR BLOCK
-            // else if (g_map[x][y] == 5) {
-            //     var body = new Cube();
-            //     body.textureNum = 4;
-            //     body.matrix.translate(x - 3.5, 0, y - 4);
-            //     body.render();
-        //     }
+            // DIAMOND BLOCK
+            else if (g_map[x][y] == 8) {
+                var body = new Cube();
+                body.textureNum = 6;
+                body.matrix.translate(x - 4, -0.270, y - 4);
+                body.render();
+            }
         }
     }
 }
