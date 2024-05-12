@@ -1,11 +1,27 @@
 // Camera.js
+
 class Camera {
     constructor() {
         this.eye = new Vector3([0, 1, -10]);
         this.at = new Vector3([0, 0, 100]);
         this.up = new Vector3([0, 1, 0]);
+        // this.eye = new Vector3([10, 30, -10]);
+        // this.at = new Vector3([0, -100, 100]);
+        // this.up = new Vector3([0, 1, 0]);
         this.speed = 0.5;
+        this.mouseSensitivity = 10; // Adjust the sensitivity here
     }
+
+    mouseDragged(deltaX, deltaY) {
+        // Adjust camera rotation based on mouse movement
+        const rotationX = -deltaY * this.mouseSensitivity;
+        const rotationY = -deltaX * this.mouseSensitivity;
+
+        // Apply rotation to the camera
+        this.rotate(rotationX, rotationY);
+    }
+
+
     moveForward(distance = 0) {
         this.moveAlongViewDirection(this.speed + distance);
     }
@@ -23,11 +39,11 @@ class Camera {
     }
 
     panLeft() {
-        this.panAroundVerticalAxis(1);
+        this.panAroundVerticalAxis(5);
     }
 
     panRight() {
-        this.panAroundVerticalAxis(-1);
+        this.panAroundVerticalAxis(-5);
     }
 
     moveAlongViewDirection(distance) {

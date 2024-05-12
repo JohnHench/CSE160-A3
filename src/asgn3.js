@@ -1,4 +1,4 @@
-// ----- VERTEX SHADER -----
+/// asgn3.js
 var VSHADER_SOURCE = `
     precision mediump float;
     attribute vec4 a_Position;
@@ -13,7 +13,6 @@ var VSHADER_SOURCE = `
         v_UV = a_UV;
     }`
 
-// ----- FRAGMENT SHADER -----
 var FSHADER_SOURCE = `
     precision mediump float;
     varying vec2 v_UV;
@@ -210,7 +209,7 @@ function initTextures() {
     }
     image2.onload = function () { sendImageToTEXTURE2(image2); };
     image2.crossOrigin = "anonymous";
-    image2.src = './textures/grass.png';
+    image2.src = './textures/Diamond64.png';
 
     // DIRT TEXTURE
     var image3 = new Image();
@@ -427,64 +426,128 @@ function updateAnimationAngles() {
 
 // Hardcoded map
 var g_map = [
-    [1, 0, 0, 0, 3, 0, 4, 0, 5, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 0, 0, 3, 4],
+    [1, 3, 0, 0, 0, 0, 0, 5, 4, 5, 4, 0, 0, 0, 0, 4, 4, 4, 0, 0, 0, 0, 5, 4, 0, 0, 0, 2, 0, 0, 2, 4],
+    [0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 4, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 4],
+    [0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 0, 4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 4, 0, 0, 0, 0, 0, 4],
+    [1, 4, 4, 4, 4, 4, 0, 0, 4, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 4, 0, 0, 4, 0, 4, 4, 4, 4, 4, 0, 0, 4, 4, 0, 0, 0, 0, 4, 0, 0, 4, 0, 0, 0, 4, 4],
+    [4, 0, 0, 0, 0, 4, 0, 0, 4, 0, 0, 0, 0, 0, 4, 0, 0, 4, 0, 4, 0, 0, 0, 4, 0, 0, 4, 0, 0, 4, 5, 4],
+    [4, 0, 0, 0, 0, 4, 0, 0, 4, 4, 4, 4, 4, 0, 4, 0, 0, 4, 0, 0, 4, 0, 0, 4, 4, 4, 4, 0, 0, 4, 0, 4],
+    [4, 0, 4, 4, 4, 4, 0, 0, 4, 0, 0, 0, 0, 0, 4, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 4, 4, 4, 4, 4, 0, 4, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 4, 0, 4, 7, 4, 4, 0, 4, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4],
+    [4, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 4, 0, 4, 4, 0, 0, 0, 4, 0, 0, 0, 0, 4, 4, 0, 0, 0, 4],
+    [4, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 4, 4, 0, 0, 0, 4, 4, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 4, 0, 4, 0, 4, 0, 0, 0, 0, 0, 4, 0, 0, 4, 4, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 4, 0, 4, 0, 4, 0, 0, 4, 4, 4, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4],
+    [4, 0, 0, 4, 5, 4, 0, 4, 0, 0, 4, 0, 4, 0, 4, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 4],
+    [4, 0, 0, 4, 4, 4, 0, 4, 0, 0, 4, 0, 4, 0, 4, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 4, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 4, 0, 4, 0, 0, 4, 0, 4, 0, 0, 4, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 4, 0, 0, 4, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 4, 0, 0, 4, 0, 7, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 4, 0, 4, 4, 0, 0, 4, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+    [4, 0, 0, 0, 4, 4, 4, 4, 0, 4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 4, 0, 4, 4, 0, 0, 4, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 4, 0, 0, 4],
+    [4, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 4, 0, 4, 7, 4, 0, 4, 0, 4, 6, 4, 0, 0, 4, 0, 0, 4, 0, 0, 0, 4],
+    [4, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 4, 0, 4, 0, 4, 0, 4, 0, 4, 0, 0, 4, 0, 0, 0, 0, 0, 4, 4, 4, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 4, 0, 0, 0, 4, 0, 4, 0, 4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 4],
+    [4, 0, 4, 4, 4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 0, 0, 0, 0, 4, 4, 4, 4, 0, 0, 4, 0, 0, 4, 0, 0, 4],
+    [4, 0, 0, 6, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 4, 0, 0, 4],
+    [4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 7, 0, 4],
+    [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
 ];
 
 // Draw map function
 function drawMap() {
-    for (let x = 0; x < 11; x++) {
-        for (let y = 0; y < 11; y++) {
+    for (let x = 0; x < 32; x++) {
+        for (let y = 0; y < 32; y++) {
             // COBBLESTONE BLOCK
             if (g_map[x][y] == 1) {
-                var body = new Cube();
-                body.textureNum = 1;
-                //body.matrix.translate(x - 4, -.75, y - 4);
-                body.matrix.translate(x - 4, -.27, y - 4);
-                body.renderfaster();
+                // Draw 4 cubes stacked on top of each other
+                for (let i = 0; i < 1; i++) {
+                    var body = new Cube();
+                    body.textureNum = 1;
+                    // Increase the vertical translation for each cube
+                    body.matrix.translate(x - 4, -0.27 + i * 1, y - 4);
+                    body.renderfaster();
+                }
             }
-            // COBBLE BLOCK AT DIFFERENT OFFSET
-            // else if (g_map[x][y] == 2) {
+            else if (g_map[x][y] == 2) {
+                for (let i = 0; i < 2; i++) {
+                    var body = new Cube();
+                    body.textureNum = 1;
+                    // Increase the vertical translation for each cube
+                    body.matrix.translate(x - 4, -0.27 + i * 1, y - 4);
+                    body.renderfaster();
+                }
+            }
+            else if (g_map[x][y] == 3) {
+                for (let i = 0; i < 3; i++) {
+                    var body = new Cube();
+                    body.textureNum = 1;
+                    // Increase the vertical translation for each cube
+                    body.matrix.translate(x - 4, -0.27 + i * 1, y - 4);
+                    body.renderfaster();
+                }
+            }
+            else if (g_map[x][y] == 4) {
+                for (let i = 0; i < 4; i++) {
+                    var body = new Cube();
+                    body.textureNum = 3;
+                    // Increase the vertical translation for each cube
+                    body.matrix.translate(x - 4, -0.27 + i * 1, y - 4);
+                    body.renderfaster();
+                }
+            }  
+
+            // TALL GRASS BLOCK
+            // else if (g_map[x][y] == 3) {
             //     var body = new Cube();
-            //     body.textureNum = 1;
-            //     body.matrix.translate(x - 3.5, -.9, y - 4);
+            //     body.textureNum = 2;
+            //     body.matrix.scale(1, 2, 1);
+            //     body.matrix.translate(x - 3.5, -.16, y - 4);
             //     body.render();
             // }
-            // TALL GRASS BLOCK
-            else if (g_map[x][y] == 3) {
-                var body = new Cube();
-                body.textureNum = 2;
-                body.matrix.scale(1, 2, 1);
-                body.matrix.translate(x - 3.5, -.16, y - 4);
-                body.render();
-            }
-            // DIRT BLOCK
-            else if (g_map[x][y] == 4) {
-                var body = new Cube();
-                body.textureNum = 3; 
-                body.matrix.translate(x - 3.5, 0, y - 4);
-                body.render();
-            }
-            // GREEN COLOR BLOCK
+
+            // DIAMOND BLOCK
             else if (g_map[x][y] == 5) {
                 var body = new Cube();
-                body.textureNum = 4; 
-                body.matrix.translate(x - 3.5, 0, y - 4);
+                body.textureNum = 2;
+                body.matrix.translate(x - 4, -0.270, y - 4);
                 body.render();
             }
+            // 2 DIAMOND BLOCK STACKED
+            else if (g_map[x][y] == 6) {
+                for (let i = 0; i < 2; i++) {
+                    var body = new Cube();
+                    body.textureNum = 2;
+                    // Increase the vertical translation for each cube
+                    body.matrix.translate(x - 4, -0.27 + i * 1, y - 4);
+                    body.renderfaster();
+                }
+            }
+            else if (g_map[x][y] == 7) {
+                for (let i = 0; i < 3; i++) {
+                    var body = new Cube();
+                    body.textureNum = 2;
+                    // Increase the vertical translation for each cube
+                    body.matrix.translate(x - 4, -0.27 + i * 1, y - 4);
+                    body.renderfaster();
+                }
+            }
+            // // GREEN COLOR BLOCK
+            // else if (g_map[x][y] == 5) {
+            //     var body = new Cube();
+            //     body.textureNum = 4;
+            //     body.matrix.translate(x - 3.5, 0, y - 4);
+            //     body.render();
+        //     }
         }
     }
 }
-
 
 // Camera control 
 function camera_Controls(event) {
@@ -508,8 +571,16 @@ function camera_Controls(event) {
     else if (event.key == "e") {
         camera.panRight();
     }
+    // else if (event.key == "z") {
+    //     camera.panUp();
+    // }
+    // else if (event.key == "c") {
+    //     camera.panDown();
+    // }
     renderScene();
 }
+
+
 
 // Builds pig + renders scene
 function renderScene() {
@@ -544,22 +615,23 @@ function renderScene() {
 
     // Ground
     var ground = new Cube();
-    ground.textureNum = 2;
-    ground.matrix.translate(0, -.271, 0);
-    ground.matrix.scale(10, 0, 10);
-    ground.matrix.translate(-.4, 0, -.4);
+    ground.textureNum = 4;
+    ground.matrix.translate(5, -.271, 3);
+    ground.matrix.scale(40, 0, 40);
+    ground.matrix.translate(-.3, 0, -.3);
     ground.render();
 
     // Sky Box
     var skyBox = new Cube();
     skyBox.color = [0, 1, 1, 1];
     skyBox.textureNum = 0;
-    skyBox.matrix.scale(50, 50, 50);
+    skyBox.matrix.scale(100, 100, 100);
     skyBox.matrix.translate(-.5, -.5, -.5);
     skyBox.render();
 
     drawMap();
 
+    // Blocky Pig Start
     // HEAD
     var head = new Cube();
     head.color = pink;
